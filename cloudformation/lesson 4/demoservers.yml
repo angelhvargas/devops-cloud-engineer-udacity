@@ -1,0 +1,53 @@
+Description: >
+    Angel Vargas / Udacity 2019
+
+Parameters:
+    EnvironmentName:
+      Description: An environment name will be prefixed to resources
+      Type: String
+
+Resources:
+    LBSecGroup:
+      Type: AWS::EC2::SecurityGroup
+      Properties: 
+        GroupDescription: Web server
+        GroupName: UdacityWebServer
+        SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+          Tags: 
+            - Tag: "Udacity"
+        VpcId: 
+          Fn::ImportValue:
+            !Sub "${EnvironmentName}-VPCID"
+    WebServerSecGroup:
+      Type: AWS::EC2::SecurityGroup
+      Properties: 
+        GroupDescription: Web server
+        GroupName: UdacityWebServer
+        SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
+          Tags: 
+            - Tag: "Udacity"
+        VpcId: 
+          Fn::ImportValue:
+            !Sub "${EnvironmentName}-VPCID"
